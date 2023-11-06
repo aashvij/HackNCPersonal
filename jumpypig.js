@@ -32,4 +32,5 @@ window.onload = function(){
 
 function redraw(){
     context.clearRect(0, 0, board.width, board.height);
+    context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
 }
