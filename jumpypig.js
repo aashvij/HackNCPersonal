@@ -13,6 +13,10 @@ let pigX = boardWidth/8;
 // pig object
 let pig = { x : pigX, y : pigY, width : pigWidth, height : pigHeight };
 
+// hay stack variable
+let haystackImg;
+
+
 // onload function
 window.onload = function(){
     board = document.getElementById("board");
@@ -27,10 +31,18 @@ window.onload = function(){
         context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
     }
 
+    haystackImg = new Image();
+    haystackImg.src = "./haystack.png";
+
     requestAnimationFrame(redraw);
+    setInterval(makeHay, 1500);
 }
 
 function redraw(){
     context.clearRect(0, 0, board.width, board.height);
     context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
+}
+
+function makeHay(){
+    let haystack = { img: haystackImg, x : hayX, y: hayY, width: hayW, height: hayH, passed: false }
 }
