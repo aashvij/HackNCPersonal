@@ -15,6 +15,7 @@ let pig = { x : pigX, y : pigY, width : pigWidth, height : pigHeight };
 
 // hay stack variable
 let haystackImg;
+let velocityX = -2;
 
 
 // onload function
@@ -41,8 +42,15 @@ window.onload = function(){
 function redraw(){
     context.clearRect(0, 0, board.width, board.height);
     context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
-}
+    for (let i = 0; i < hayArray.length; i++){
+        let hay = hayArray[i];
+        hay.x += velocityX;
+        context.drawImage(haystackImg, hay.x, hay.y, hay.width, hay.height);
+    }
+} 
 
 function makeHay(){
     let haystack = { img: haystackImg, x : hayX, y: hayY, width: hayW, height: hayH, passed: false }
+
+    hayArray.push(haystack);
 }
