@@ -5,21 +5,34 @@ let boardHeight = 640;
 let context;
 
 // pig variables 
-let pigWidth = 90;
-let pigHeight = 90;
+let pigWidth = 70;
+let pigHeight = 70;
 let pigY = boardHeight/2;
 let pigX = boardWidth/8;
 
 // pig object
 let pig = { x : pigX, y : pigY, width : pigWidth, height : pigHeight };
 
-// hay stack variable
+// hay stack variables
 let hayArray = [];
-let hayHeight = 64;
-let hayWidth = 20;
+let hayX = boardWidth;
+let hayY = boardHeight/2;
+let hayWidth = 100;
+let hayHeight = 360;
 let haystackImg;
-let velocityX = -2;
 
+//windmill variables
+let windmillArray = [];
+let wmX = boardWidth;
+let wmY = 0;
+let wmWidth = 100;
+let wmHeight = 360;
+let windmillImg;
+
+//mechanics
+let velocityX = -2;
+let velocityY = 0;
+let gravity = 0.3; // rate of change of velocity over time
 
 // onload function
 window.onload = function(){
@@ -35,16 +48,27 @@ window.onload = function(){
         context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
     }
 
+    //load haystack image 
     haystackImg = new Image();
     haystackImg.src = "./haystack.png";
 
     requestAnimationFrame(redraw);
-    setInterval(makeHay, 1500);
+    setInterval(makeHay, 1500); //1500 miliseconds = 1.5 seconds
+    document.addEventListener("keydown",  jumpPig); 
 }
 
 function redraw(){
+    requestAnimationFrame(redraw);
+
+    //redrawing background
     context.clearRect(0, 0, board.width, board.height);
+
+    //redrawing pig
+    velocityY += gravity;
+    pig.y += velocityY;
     context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
+
+    //redrawing haystacks
     for (let i = 0; i < hayArray.length; i++){
         let hay = hayArray[i];
         hay.x += velocityX;
@@ -53,7 +77,12 @@ function redraw(){
 } 
 
 function makeHay(){
-    let haystack = { img: haystackImg, x : hayX, y: hayY, width: hayW, height: hayH, passed: false }
-
+    let haystack = { img: haystackImg, x : hayX, y: hayY, width: hayWidth, height: hayHeight, passed: false }
     hayArray.push(haystack);
+}
+
+function jumpPig(key){
+    if (key.code == "Space" || key.code == "ArrowUp" || key.code == "KeyJ"){
+        velocityY = -6;
+    }
 }
