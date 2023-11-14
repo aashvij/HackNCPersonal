@@ -14,6 +14,9 @@ let pigX = boardWidth/8;
 let pig = { x : pigX, y : pigY, width : pigWidth, height : pigHeight };
 
 // hay stack variable
+let hayArray = [];
+let hayHeight = 64;
+let hayWidth = 20;
 let haystackImg;
 let velocityX = -2;
 
