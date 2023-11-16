@@ -25,12 +25,12 @@ let haystackImg;
 let windmillArray = [];
 let wmX = boardWidth;
 let wmY = 0;
-let wmWidth = 100;
-let wmHeight = 360;
+let wmWidth = 150;
+let wmHeight = 260;
 let windmillImg;
 
 //mechanics
-let velocityX = -2;
+let velocityX = -3;
 let velocityY = 0;
 let gravity = 0.3; // rate of change of velocity over time
 
@@ -52,8 +52,13 @@ window.onload = function(){
     haystackImg = new Image();
     haystackImg.src = "./haystack.png";
 
+    //load windmill image
+    windmillImg = new Image();
+    windmillImg.src = "./windmill.png";
+
     requestAnimationFrame(redraw);
     setInterval(makeHay, 1500); //1500 miliseconds = 1.5 seconds
+    setInterval(makeWM, 1500);
     document.addEventListener("keydown",  jumpPig); 
 }
 
@@ -71,14 +76,24 @@ function redraw(){
     //redrawing haystacks
     for (let i = 0; i < hayArray.length; i++){
         let hay = hayArray[i];
+        let windmill = windmillArray[i];
         hay.x += velocityX;
+        windmill.x += velocityX;
         context.drawImage(haystackImg, hay.x, hay.y, hay.width, hay.height);
+        context.drawImage(windmillImg, windmill.x, windmill.y, windmill.width, windmill.height);
     }
 } 
 
 function makeHay(){
-    let haystack = { img: haystackImg, x : hayX, y: hayY, width: hayWidth, height: hayHeight, passed: false }
+    let random = hayY + Math.random()*(hayHeight/3);
+
+    let haystack = { img: haystackImg, x : hayX, y: random, width: hayWidth, height: hayHeight, passed: false }
     hayArray.push(haystack);
+}
+
+function makeWM(){
+    let windmill = { img: windmillImg, x : wmX, y: wmY, width: wmWidth, height: wmHeight, passed: false }
+    windmillArray.push(windmill);
 }
 
 function jumpPig(key){
