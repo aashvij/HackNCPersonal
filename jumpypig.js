@@ -25,14 +25,16 @@ let haystackImg;
 let windmillArray = [];
 let wmX = boardWidth;
 let wmY = 0;
-let wmWidth = 150;
-let wmHeight = 260;
+let wmWidth = 120;
+let wmHeight = 290;
 let windmillImg;
 
 //mechanics
-let velocityX = -3;
+let velocityX = -2;
 let velocityY = 0;
 let gravity = 0.3; // rate of change of velocity over time
+
+let gameOver = false; 
 
 // onload function
 window.onload = function(){
@@ -58,7 +60,6 @@ window.onload = function(){
 
     requestAnimationFrame(redraw);
     setInterval(makeHay, 1500); //1500 miliseconds = 1.5 seconds
-    setInterval(makeWM, 1500);
     document.addEventListener("keydown",  jumpPig); 
 }
 
@@ -71,7 +72,12 @@ function redraw(){
     //redrawing pig
     velocityY += gravity;
     pig.y += velocityY;
+    //pig.y = Math.max(pig.y + velocityY, 0);
     context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
+
+    if (pig.y > board.height){
+        gameOver = true;
+    }
 
     //redrawing haystacks
     for (let i = 0; i < hayArray.length; i++){
@@ -82,22 +88,32 @@ function redraw(){
         context.drawImage(haystackImg, hay.x, hay.y, hay.width, hay.height);
         context.drawImage(windmillImg, windmill.x, windmill.y, windmill.width, windmill.height);
     }
+
+    if (collision(pig, haystack)){
+        gameOver = true;
+    }
 } 
 
 function makeHay(){
-    let random = hayY + Math.random()*(hayHeight/3);
+    if (gameOver){
+        return; 
+    }
+    let random = hayY + Math.random()*(hayHeight/5);
+    let opening = boardHeight/6;
 
     let haystack = { img: haystackImg, x : hayX, y: random, width: hayWidth, height: hayHeight, passed: false }
-    hayArray.push(haystack);
-}
+    hayArray.push(haystack); 
 
-function makeWM(){
-    let windmill = { img: windmillImg, x : wmX, y: wmY, width: wmWidth, height: wmHeight, passed: false }
+    let windmill = { img: windmillImg, x : wmX, y: random-wmHeight-opening, width: wmWidth, height: wmHeight, passed: false }
     windmillArray.push(windmill);
 }
 
 function jumpPig(key){
-    if (key.code == "Space" || key.code == "ArrowUp" || key.code == "KeyJ"){
+    if (key.code == "Space" || key.code == "ArrowUp" || key.code == "KeyX"){
         velocityY = -6;
     }
+}
+
+function collision(a, b){
+    return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y; 
 }
