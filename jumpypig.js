@@ -26,7 +26,7 @@ let windmillArray = [];
 let wmX = boardWidth;
 let wmY = 0;
 let wmWidth = 120;
-let wmHeight = 290;
+let wmHeight = 360;
 let windmillImg;
 
 //mechanics
@@ -108,7 +108,7 @@ function makeHay(){
         return; 
     }
     let random = hayY + Math.random()*(hayHeight/5);
-    let opening = boardHeight/6;
+    let opening = boardHeight/8;
 
     let haystack = { img: haystackImg, x : hayX, y: random, width: hayWidth, height: hayHeight}
     hayArray.push(haystack); 
@@ -131,8 +131,6 @@ function collide(a, b){
     && a.y < b.y + b.height - 50
     && a.y + a.height - 50 > b.y; 
 }
-
-
 
 function reload(key){
     if (key.code == "Space"){
