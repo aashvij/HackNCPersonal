@@ -34,7 +34,8 @@ let velocityX = -2;
 let velocityY = 0;
 let gravity = 0.3; // rate of change of velocity over time
 
-let gameOver = false; 
+let gameOver = false;
+let oink = new Audio("oink.mp3");
 
 // onload function
 window.onload = function(){
@@ -119,6 +120,7 @@ function makeHay(){
 function jumpPig(key){
     if (key.code == "Space" || key.code == "ArrowUp" || key.code == "KeyX"){
         velocityY = -6;
+        oink.play();
     }
 }
 
