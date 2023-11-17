@@ -65,17 +65,23 @@ window.onload = function(){
 
 function redraw(){
     requestAnimationFrame(redraw);
+    if (gameOver){
+        //dimScreen();
+        document.addEventListener("keydown", reload);
+        return;
+    }
 
     //redrawing background
     context.clearRect(0, 0, board.width, board.height);
 
     //redrawing pig
     velocityY += gravity;
-    pig.y += velocityY;
-    //pig.y = Math.max(pig.y + velocityY, 0);
+    pig.y = Math.max(pig.y + velocityY, 0);
     context.drawImage(pigImage, pig.x, pig.y, pig.width, pig.height);
 
     if (pig.y > board.height){
+        //dimScreen();
+        document.addEventListener("keydown", reload);
         gameOver = true;
     }
 
@@ -87,24 +93,26 @@ function redraw(){
         windmill.x += velocityX;
         context.drawImage(haystackImg, hay.x, hay.y, hay.width, hay.height);
         context.drawImage(windmillImg, windmill.x, windmill.y, windmill.width, windmill.height);
-    }
 
-    if (collision(pig, haystack)){
-        gameOver = true;
+        if (collide(pig, hay) || collide(pig, windmill)){
+            //dimScreen();
+            gameOver = true;
+        }
     }
 } 
 
 function makeHay(){
     if (gameOver){
+        document.addEventListener("keydown", reload);
         return; 
     }
     let random = hayY + Math.random()*(hayHeight/5);
     let opening = boardHeight/6;
 
-    let haystack = { img: haystackImg, x : hayX, y: random, width: hayWidth, height: hayHeight, passed: false }
+    let haystack = { img: haystackImg, x : hayX, y: random, width: hayWidth, height: hayHeight}
     hayArray.push(haystack); 
 
-    let windmill = { img: windmillImg, x : wmX, y: random-wmHeight-opening, width: wmWidth, height: wmHeight, passed: false }
+    let windmill = { img: windmillImg, x : wmX, y: random-wmHeight-opening, width: wmWidth, height: wmHeight}
     windmillArray.push(windmill);
 }
 
@@ -114,6 +122,18 @@ function jumpPig(key){
     }
 }
 
-function collision(a, b){
-    return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y; 
+function collide(a, b){
+    // check for collision between pig and hay or windmill
+    return a.x < b.x + b.width -50 
+    && a.x + a.width - 50 > b.x 
+    && a.y < b.y + b.height - 50
+    && a.y + a.height - 50 > b.y; 
+}
+
+
+
+function reload(key){
+    if (key.code == "Space"){
+        document.location.reload();
+    }
 }
